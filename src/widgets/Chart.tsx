@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { createChart, LineSeries } from "lightweight-charts";
+import { createChart, AreaSeries } from "lightweight-charts";
 import { getCoinChart } from "../entities/coin/api";
 
 export interface ChartProps {
@@ -13,12 +13,48 @@ function Chart({ id, days }: ChartProps) {
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
-    const chart = createChart(chartContainerRef.current, {
-      width: 800,
-      height: 400,
+    const container = chartContainerRef.current;
+
+    const chart = createChart(container, {
+      width: container.clientWidth,
+      height: container.clientHeight,
+      layout: {
+        background: { color: "#111111" },
+        textColor: "#9ca3af",
+      },
+      grid: {
+        vertLines: { visible: false },
+        horzLines: { color: "#1f1f1f" },
+      },
+      crosshair: {
+        vertLine: { color: "#6366f1" },
+        horzLine: { color: "#6366f1" },
+      },
+      rightPriceScale: {
+        borderVisible: false,
+      },
+      timeScale: {
+        borderVisible: false,
+        timeVisible: true,
+      },
     });
 
-    const lineSeries = chart.addSeries(LineSeries);
+    const lineSeries = chart.addSeries(AreaSeries, {
+      lineColor: "#6366f1",
+      topColor: "rgba(99, 102, 241, 0.4)",
+      bottomColor: "rgba(99, 102, 241, 0.0)",
+      lineWidth: 2,
+      priceLineVisible: false,
+    });
+
+    const resizeObserver = new ResizeObserver(() => {
+      chart.applyOptions({
+        width: container.clientWidth,
+        height: container.clientHeight,
+      });
+    });
+
+    resizeObserver.observe(container);
 
     async function fetchChart() {
       const data = await getCoinChart(id, days);
@@ -31,10 +67,13 @@ function Chart({ id, days }: ChartProps) {
 
     fetchChart();
 
-    return () => chart.remove();
+    return () => {
+      chart.remove();
+      resizeObserver.disconnect();
+    };
   }, [id, days]);
 
-  return <div ref={chartContainerRef} />;
+  return <div ref={chartContainerRef} className="w-full h-[800px]" />;
 }
 
 export default Chart;
