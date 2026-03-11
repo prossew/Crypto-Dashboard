@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { useAuthStore } from "@/features/auth/store";
 import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setToken } = useAuthStore();
 
   async function handleLogin() {
     try {
@@ -17,7 +19,7 @@ function Login() {
         email,
         password,
       });
-      localStorage.setItem("token", response.data.token);
+      setToken(response.data.token);
       navigate("/");
     } catch (error) {
       console.log("Не получилось", error);
