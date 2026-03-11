@@ -13,7 +13,7 @@ function Register() {
 
   async function handleRegister() {
     try {
-      const response = await axios.post("http://localhost:3001/auth/register", {
+      const response = await axios.post("https://crypto-dashboard-pu7n.onrender.com/auth/register", {
         email,
         password,
         confirmPassword,

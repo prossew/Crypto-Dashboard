@@ -15,10 +15,13 @@ function Login() {
 
   async function handleLogin() {
     try {
-      const response = await axios.post("http://localhost:3001/auth/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://crypto-dashboard-pu7n.onrender.com/auth/login",
+        {
+          email,
+          password,
+        },
+      );
       setToken(response.data.token);
       navigate("/");
     } catch (error) {
