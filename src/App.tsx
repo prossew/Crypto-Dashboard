@@ -3,6 +3,7 @@ import Home from "./pages/ Home";
 import Coin from "./pages/Coin";
 import Header from "./widgets/Header";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/coin/:id" element={<Coin />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
